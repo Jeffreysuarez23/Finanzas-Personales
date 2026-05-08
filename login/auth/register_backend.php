@@ -54,24 +54,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail = new PHPMailer(true);
 
         try {
-            // Configuración del servidor Gmail SMTP
+            // Configuración del servidor SMTP usando variables de entorno
             $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com';
+            $mail->Host       = getenv('SMTP_HOST') ?: 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'jeffrey232008suarez@gmail.com'; // REEMPLAZAR CON TU CORREO
-            $mail->Password   = 'jcpi wgmj obsx zosl'; // REEMPLAZAR CON TU CONTRASEÑA DE APLICACIÓN
+            $mail->Username   = getenv('SMTP_USER') ?: 'tu_correo@gmail.com';
+            $mail->Password   = getenv('SMTP_PASS') ?: '';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
 
             // Destinatarios
-            $mail->setFrom('tu_correo@gmail.com', 'Finanzas Framework');
+            $mail->setFrom($mail->Username, 'Finanzas Framework');
             $mail->addAddress($email, $name);
 
             // Contenido
             $mail->isHTML(true);
             $mail->Subject = 'Activa tu cuenta - Finanzas Framework';
             
-            $activation_link = "http://" . $_SERVER['HTTP_HOST'] . "/ProyectoPersonal/login/activate.php?token=" . $token;
+            // Detectar protocolo (http o https)
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
+            
+            // En Render, el root es la carpeta login, así que el enlace es directo
+            $activation_link = $protocol . $_SERVER['HTTP_HOST'] . "/activate.php?token=" . $token;
             
             $mail->Body    = "Hola $name,<br><br>Gracias por registrarte. Por favor, activa tu cuenta haciendo clic en el siguiente enlace:<br><br><a href='$activation_link'>$activation_link</a><br><br>Si no te registraste, puedes ignorar este correo.";
             $mail->AltBody = "Hola $name,\n\nGracias por registrarte. Por favor, activa tu cuenta haciendo clic en el siguiente enlace:\n\n$activation_link\n\nSi no te registraste, puedes ignorar este correo.";
@@ -79,7 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->send();
             echo json_encode(['status' => 'success', 'message' => 'Registro exitoso. Por favor, revisa tu correo para activar tu cuenta.']);
         } catch (Exception $e) {
-            echo json_encode(['status' => 'warning', 'message' => 'Usuario registrado, pero no se pudo enviar el correo de activación. Contacta al administrador. Error: ' . $mail->ErrorInfo]);
+            // Log del error para depuración
+            error_log("Error de PHPMailer: " . $mail->ErrorInfo);
+            echo json_encode(['status' => 'warning', 'message' => 'Usuario registrado, pero no se pudo enviar el correo de activación.']);
         }
 
     } catch (\PDOException $e) {
