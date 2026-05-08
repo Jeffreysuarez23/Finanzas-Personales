@@ -56,13 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             // Configuración del servidor SMTP usando variables de entorno
             $mail->isSMTP();
-            $mail->Host       = getenv('SMTP_HOST') ?: 'smtp.gmail.com';
+            $mail->Host       = getenv('SMTP_HOST') ?: 'sandbox.smtp.mailtrap.io';
             $mail->SMTPAuth   = true;
-            $mail->Username   = getenv('SMTP_USER') ?: 'tu_correo@gmail.com';
+            $mail->Username   = getenv('SMTP_USER') ?: '';
             $mail->Password   = getenv('SMTP_PASS') ?: '';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = 587;
-            $mail->Timeout    = 20; // Aumentamos a 20 segundos
+            $mail->Port       = getenv('SMTP_PORT') ?: 2525; // Puerto 2525 es ideal para Mailtrap en Render
+            $mail->Timeout    = 20;
             
             // Opciones de SSL para evitar bloqueos por certificados en servidores
             $mail->SMTPOptions = array(
