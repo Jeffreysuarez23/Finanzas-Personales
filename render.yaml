@@ -5,6 +5,7 @@ services:
     plan: free
     rootDir: login
     buildCommand: composer install
+    startCommand: apache2-foreground
     envVars:
       - key: DB_HOST
         sync: false
