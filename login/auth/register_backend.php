@@ -60,9 +60,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->SMTPAuth   = true;
             $mail->Username   = getenv('SMTP_USER') ?: 'tu_correo@gmail.com';
             $mail->Password   = getenv('SMTP_PASS') ?: '';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Cambiado a SSL/TLS seguro
-            $mail->Port       = 465; // Puerto 465 suele ser más estable en servidores
-            $mail->Timeout    = 10; // No esperar más de 10 segundos
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+            $mail->Timeout    = 20; // Aumentamos a 20 segundos
+            
+            // Opciones de SSL para evitar bloqueos por certificados en servidores
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+            );
 
             // Destinatarios
             $mail->setFrom($mail->Username, 'Finanzas Framework');
