@@ -2200,22 +2200,30 @@ tbody td {
 
 /* Custom Buttons for SWAL */
 .premium-confirm-btn {
-    border-radius: 50px !important;
+    border-radius: 20px !important;
     padding: 16px 32px !important;
     font-weight: 700 !important;
     font-size: 1rem !important;
     transition: all 0.25s ease !important;
+    color: white !important;
+    border: none;
     box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important;
 }
 
 .premium-cancel-btn {
-    border-radius: 50px !important;
+    border-radius: 20px !important;
     padding: 16px 32px !important;
     font-weight: 700 !important;
     font-size: 1rem !important;
     background: #334155 !important;
     color: #cbd5e1 !important;
     transition: all 0.25s ease !important;
+    border: none !important;
+}
+
+.premium-cancel-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 30px rgba(142, 143, 145, 0.55) !important;
 }
 
 .premium-confirm-btn:hover {
@@ -2224,10 +2232,10 @@ tbody td {
 }
 
 /* Button Colors */
-.btn-emerald { background: linear-gradient(135deg, #22c55e, #16a34a) !important; box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4) !important; }
-.btn-indigo { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important; }
-.btn-amber { background: linear-gradient(135deg, #f59e0b, #d97706) !important; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4) !important; }
-.btn-rose { background: linear-gradient(135deg, #ef4444, #dc2626) !important; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4) !important; }
+.btn-emerald { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important; color: white !important;}
+.btn-indigo { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important; color: white !important;}
+.btn-amber { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important; color: white !important;}
+.btn-rose { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important; color: white !important;}
 
 /* UI Buttons */
 .btn-mov { background: linear-gradient(135deg, #22c55e, #16a34a) !important; }
