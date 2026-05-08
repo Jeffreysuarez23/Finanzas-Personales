@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: finanzas-personales
+    runtime: php
+    plan: free
+    rootDir: login
+    buildCommand: composer install
+    envVars:
+      - key: DB_HOST
+        sync: false
+      - key: DB_NAME
+        value: postgres
+      - key: DB_USER
+        value: postgres
+      - key: DB_PASS
+        sync: false
+      - key: DB_PORT
+        value: "5432"
