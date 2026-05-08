@@ -25,7 +25,7 @@ $resumen_mensual = [];
 
 foreach ($meses_nombres as $num => $nombre) {
     // Ingresos y Gastos
-    $stmt = $pdo->prepare("SELECT type, SUM(amount) as total FROM movements WHERE id_user = ? AND MONTH(created_at) = ? AND YEAR(created_at) = ? GROUP BY type");
+    $stmt = $pdo->prepare("SELECT type, SUM(amount::NUMERIC) as total FROM movements WHERE id_user = ? AND EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ? GROUP BY type");
     $stmt->execute([$user_id, $num, $anio_sel]);
     $movs = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
     
@@ -33,12 +33,12 @@ foreach ($meses_nombres as $num => $nombre) {
     $gasto = $movs['Gasto'] ?? 0;
 
     // Ahorros
-    $stmt = $pdo->prepare("SELECT SUM(amount) FROM save WHERE id_user = ? AND MONTH(created_at) = ? AND YEAR(created_at) = ?");
+    $stmt = $pdo->prepare("SELECT SUM(amount::NUMERIC) FROM save WHERE id_user = ? AND EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ?");
     $stmt->execute([$user_id, $num, $anio_sel]);
     $ahorro = $stmt->fetchColumn() ?? 0;
 
     // Gastos Necesarios
-    $stmt = $pdo->prepare("SELECT state, SUM(amount) as total FROM necessary_expense WHERE id_user = ? AND MONTH(created_at) = ? AND YEAR(created_at) = ? GROUP BY state");
+    $stmt = $pdo->prepare("SELECT state, SUM(amount::NUMERIC) as total FROM necessary_expense WHERE id_user = ? AND EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ? GROUP BY state");
     $stmt->execute([$user_id, $num, $anio_sel]);
     $nec_sums = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
     
@@ -62,7 +62,7 @@ foreach ($meses_nombres as $num => $nombre) {
 
 // --- LÓGICA DE DEUDAS (GLOBAL) ---
 // 1. Obtener saldos pendientes actuales
-$stmt = $pdo->prepare("SELECT concept, SUM(amount) as total FROM debts WHERE id_user = ? AND state = 'Pendiente' GROUP BY concept");
+$stmt = $pdo->prepare("SELECT concept, SUM(amount::NUMERIC) as total FROM debts WHERE id_user = ? AND state = 'Pendiente' GROUP BY concept");
 $stmt->execute([$user_id]);
 $pendientes_raw = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
@@ -71,7 +71,7 @@ $me_deben_pend = (float)($pendientes_raw['Me deben'] ?? 0);
 
 // 2. Obtener lo que YA SE PAGÓ (sumando los abonos realizados)
 $stmt = $pdo->prepare("
-    SELECT d.concept, SUM(p.amount) as total_pagado 
+    SELECT d.concept, SUM(p.amount::NUMERIC) as total_pagado 
     FROM pay_debt p
     JOIN debts d ON p.id_debt = d.id_debt
     WHERE d.id_user = ?
