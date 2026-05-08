@@ -23,7 +23,7 @@ $resumen_mensual = [];
 
 foreach ($meses_nombres as $num => $nombre) {
     // Ingresos y Gastos
-    $stmt = $pdo->prepare("SELECT type, SUM(amount) as total FROM movements WHERE id_user = ? AND MONTH(created_at) = ? AND YEAR(created_at) = ? GROUP BY type");
+    $stmt = $pdo->prepare("SELECT type, SUM(amount) as total FROM movements WHERE id_user = ? AND EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ? GROUP BY type");
     $stmt->execute([$user_id, $num, $anio_sel]);
     $movs = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
     
@@ -31,12 +31,12 @@ foreach ($meses_nombres as $num => $nombre) {
     $gasto = $movs['Gasto'] ?? 0;
 
     // Ahorros
-    $stmt = $pdo->prepare("SELECT SUM(amount) FROM save WHERE id_user = ? AND MONTH(created_at) = ? AND YEAR(created_at) = ?");
+    $stmt = $pdo->prepare("SELECT SUM(amount) FROM save WHERE id_user = ? AND EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ?");
     $stmt->execute([$user_id, $num, $anio_sel]);
     $ahorro = $stmt->fetchColumn() ?? 0;
 
     // Gastos Necesarios (Separar por estado)
-    $stmt = $pdo->prepare("SELECT state, SUM(amount) as total FROM necessary_expense WHERE id_user = ? AND MONTH(created_at) = ? AND YEAR(created_at) = ? GROUP BY state");
+    $stmt = $pdo->prepare("SELECT state, SUM(amount) as total FROM necessary_expense WHERE id_user = ? AND EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ? GROUP BY state");
     $stmt->execute([$user_id, $num, $anio_sel]);
     $nec_sums = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
     
@@ -66,18 +66,18 @@ $total_necesarios_pendientes = $resumen_mensual[$mes_sel]['necesarios_pendientes
 $balance = $resumen_mensual[$mes_sel]['deberia_tener'];
 
 // Listas detalladas para las tablas
-$stmt = $pdo->prepare("SELECT * FROM movements WHERE id_user = ? AND MONTH(created_at) = ? AND YEAR(created_at) = ? ORDER BY created_at DESC");
+$stmt = $pdo->prepare("SELECT * FROM movements WHERE id_user = ? AND EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ? ORDER BY created_at DESC");
 $stmt->execute([$user_id, $mes_sel, $anio_sel]);
 $movements = $stmt->fetchAll();
 
 $ingresos_list = array_filter($movements, fn($m) => $m['type'] === 'Ingreso');
 $gastos_list = array_filter($movements, fn($m) => $m['type'] === 'Gasto');
 
-$stmt = $pdo->prepare("SELECT * FROM save WHERE id_user = ? AND MONTH(created_at) = ? AND YEAR(created_at) = ? ORDER BY created_at DESC");
+$stmt = $pdo->prepare("SELECT * FROM save WHERE id_user = ? AND EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ? ORDER BY created_at DESC");
 $stmt->execute([$user_id, $mes_sel, $anio_sel]);
 $savings = $stmt->fetchAll();
 
-$stmt = $pdo->prepare("SELECT * FROM necessary_expense WHERE id_user = ? AND MONTH(created_at) = ? AND YEAR(created_at) = ? ORDER BY created_at DESC");
+$stmt = $pdo->prepare("SELECT * FROM necessary_expense WHERE id_user = ? AND EXTRACT(MONTH FROM created_at) = ? AND EXTRACT(YEAR FROM created_at) = ? ORDER BY created_at DESC");
 $stmt->execute([$user_id, $mes_sel, $anio_sel]);
 $necessary_expenses = $stmt->fetchAll();
 
