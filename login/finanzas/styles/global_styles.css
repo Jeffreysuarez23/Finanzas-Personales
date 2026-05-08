@@ -2235,7 +2235,7 @@ tbody td {
 .btn-emerald { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important; color: white !important;}
 .btn-indigo { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important; color: white !important;}
 .btn-amber { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important; color: white !important;}
-.btn-rose { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4) !important; color: white !important;}
+.btn-rose { background: linear-gradient(135deg, #fc0c0c, #a34557) !important; box-shadow: 0 4px 20px rgba(231, 75, 75, 0.4) !important; color: white !important;}
 
 /* UI Buttons */
 .btn-mov { background: linear-gradient(135deg, #22c55e, #16a34a) !important; }
@@ -2243,7 +2243,7 @@ tbody td {
 .btn-nec { background: linear-gradient(135deg, #2563eb, #3b82f6) !important; }
 
 /* Strong Alert Variations */
-.premium-swal-popup.swal-success { border-color: #22c55e !important; box-shadow: 0 0 80px rgba(34, 197, 94, 0.2) !important; }
+.premium-swal-popup.swal-success { border-color: #2563eb !important; box-shadow: 0 0 80px rgba(59, 130, 246, 0.4)  !important; }
 .premium-swal-popup.swal-error { border-color: #eb0404 !important; color: white !important; box-shadow: 0 0 80px rgba(239, 68, 68, 0.2) !important; }
 .premium-swal-popup.swal-info { border-color: #3b82f6 !important; box-shadow: 0 0 80px rgba(59, 130, 246, 0.2) !important; }
 
