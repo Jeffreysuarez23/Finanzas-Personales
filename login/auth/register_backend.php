@@ -84,9 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->send();
             echo json_encode(['status' => 'success', 'message' => 'Registro exitoso. Por favor, revisa tu correo para activar tu cuenta.']);
         } catch (Exception $e) {
-            // Log del error para depuración
-            error_log("Error de PHPMailer: " . $mail->ErrorInfo);
-            echo json_encode(['status' => 'warning', 'message' => 'Usuario registrado, pero no se pudo enviar el correo de activación.']);
+            // Mostramos el error real para saber qué está bloqueando Gmail
+            echo json_encode(['status' => 'warning', 'message' => 'Usuario registrado, pero el correo falló. Error: ' . $mail->ErrorInfo]);
         }
 
     } catch (\PDOException $e) {
