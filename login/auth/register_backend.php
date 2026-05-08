@@ -73,8 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 )
             );
 
-            // Destinatarios
-            $mail->setFrom($mail->Username, 'Finanzas Framework');
+            // Destinatarios - Usamos un correo genérico para Mailtrap
+            $mail->setFrom('no-reply@finanzasframework.com', 'Finanzas Framework');
             $mail->addAddress($email, $name);
 
             // Contenido
