@@ -1,0 +1,77 @@
+CREATE DATABASE finanzas_framework
+
+CREATE 	TABLE roles(
+    id_rol int AUTO_INCREMENT PRIMARY KEY,
+    name varchar(50)
+)
+
+CREATE 	TABLE users(
+    id_user int AUTO_INCREMENT PRIMARY KEY,
+    name varchar(50) not null,
+    lastname varchar(100) not null,
+    user_name varchar(100) not null,
+    email varchar(255) not null UNIQUE,
+    password_hash varchar(255) not null UNIQUE,
+    user_active int(1) not null DEFAULT 0,
+    token_activation varchar(100),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id_rol int,
+    FOREIGN KEY (id_rol) REFERENCES roles(id_rol)
+)
+
+CREATE TABLE movements(
+    id_movement int AUTO_INCREMENT PRIMARY KEY,
+    type varchar(100) not null,
+    category varchar(100) not null,
+    description varchar(255), 
+    amount DECIMAL(10,2) NOT null,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id_user int,
+    FOREIGN KEY (id_user) REFERENCES users(id_user)
+)
+
+CREATE TABLE necessary_expense(
+    id_necessary int AUTO_INCREMENT PRIMARY KEY,
+    type varchar(100) not null,
+    category varchar(100) not null,
+    description varchar(255), 
+    amount DECIMAL(10,2) NOT null,
+    state varchar(50) not null DEFAULT 'Pendiente',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id_user int,
+    FOREIGN KEY (id_user) REFERENCES users(id_user)
+)
+
+
+CREATE TABLE debts(
+    id_debt int AUTO_INCREMENT PRIMARY KEY,
+    concept varchar(100) not null,
+    type_debt varchar(100) not null,
+    description varchar(255), 
+    amount DECIMAL(10,2) NOT null,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    state varchar(50) not null,
+    id_user int,
+    FOREIGN KEY (id_user) REFERENCES users(id_user)
+)
+
+
+CREATE TABLE pay_debt(
+    id_pay_debt int AUTO_INCREMENT PRIMARY KEY,
+    amount varchar(100) not null,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    method varchar(100) not null,
+    description varchar(255), 
+    id_debt int,
+    FOREIGN KEY (id_debt) REFERENCES debts(id_debt)
+)
+
+
+
+CREATE TABLE save(
+    id_save int AUTO_INCREMENT PRIMARY KEY,
+    amount varchar(100) not null,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id_user int,
+    FOREIGN KEY (id_user) REFERENCES users(id_user)
+)
